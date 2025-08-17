@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise 🌸</title>
+<link rel="icon" type="image/png" href="shiba-inu.png">
+
+<!-- ฟอนต์ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Mali:wght@300;400;600&family=Playpen+Sans+Thai:wght@300;500;700&display=swap');
+</style>
+
+<style>
+/* ==== Global ==== */
+body {
+    font-family: 'Playpen Sans Thai', 'Mali', sans-serif;
+    background: #fffaf0;
+    color: #333;
+    margin: 0;
+    padding: 0 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.6s ease;
+    overflow-x: hidden;
+}
+body.fade-out { opacity: 0; }
+
+/* ==== Logo ==== */
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 15px;
+    animation: floatLogo 2s ease-in-out infinite alternate;
+}
+@keyframes floatLogo {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+/* ==== Heading ==== */
+h1 {
+    font-family: 'Mali', cursive;
+    font-size: 2.5em;
+    color: #ff6b81;
+    margin: 0 0 10px;
+    transition: transform 0.3s;
+}
+h2 {
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 0;
+    color: #555;
+    transition: transform 0.3s;
+}
+
+/* ==== Input ==== */
+input[type="text"] {
+    margin-top: 20px;
+    padding: 12px;
+    width: 250px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    text-align: center;
+    outline: none;
+    font-family: inherit;
+    transition: transform 0.2s, border-color 0.2s;
+}
+input[type="text"]:focus {
+    border-color: #ff6b81;
+    transform: scale(1.05);
+}
+
+/* ==== Error ==== */
+.error {
+    color: #ff4d6d;
+    margin-top: 10px;
+    font-size: 0.95em;
+    display: none;
+    font-weight: bold;
+    animation: bounce 0.4s;
+    font-family: 'Mali', sans-serif;
+}
+@keyframes bounce {
+    30% { transform: translateY(-6px); }
+    70% { transform: translateY(-3px); }
+}
+
+/* ==== Button ==== */
+button {
+    margin-top: 20px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 25px;
+    background: #ff6b81;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.3s, transform 0.3s;
+}
+button:hover {
+    background: #ff4d6d;
+    transform: scale(1.05);
+}
+
+/* ==== Heart animation ==== */
+.heart {
+    position: absolute;
+    animation: floatUp 1.5s ease-out forwards;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-150px) scale(1.3); opacity: 0; }
+}
+
+/* ==== Modal ==== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: #fffaf0;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-size: 1.2em;
+    color: #ff6b81;
+    text-align: center;
+    animation: popIn 0.4s ease;
+    font-family: 'Mali', sans-serif;
+}
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 768px) {
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.1em; }
+    input[type="text"] { width: 200px; }
+}
+@media (max-width: 480px) {
+    h1 { font-size: 1.7em; }
+    h2 { font-size: 1em; }
+    input[type="text"], button { width: 90%; }
+}
+</style>
+</head>
+<body>
+
+<h1 id="greet-title">สวัสดีคนน่ารักก! 🐱</h1>
+<h2 id="greet-subtitle">มีคนอยากให้บางอย่างกับเธอ ✨</h2>
+
+<input type="text" id="password" placeholder="กรอก IG ของเธอหน่อยนะ" aria-label="กรอก IG ของเธอหน่อยนะ">
+<div class="error" id="error-msg">❌ ลองอีกครั้งนะ 😺💖</div>
+
+<button id="start-btn">💌 ไปดูอะไรที่พิเศษกัน!</button>
+
+<!-- Modal -->
+<div class="modal" id="success-modal">
+    <div class="modal-content">🎉 พร้อมรึยัง…กับของน่ารักเล็ก ๆ 💖</div>
+</div>
+
+<script>
+const correctPassword = "mojipxnz_20yo";
+const btn = document.getElementById('start-btn');
+const modal = document.getElementById('success-modal');
+
+btn.addEventListener('click', transitionToMotivation);
+
+modal.addEventListener('click', e => {
+    if (e.target === modal) modal.style.display = "none";
+});
+window.addEventListener('keydown', e => {
+    if (e.key === "Escape") modal.style.display = "none";
+});
+
+function transitionToMotivation() {
+    const input = document.getElementById('password').value.trim();
+    const error = document.getElementById('error-msg');
+
+    if (input !== correctPassword) {
+        error.style.display = "block";
+        setTimeout(() => error.style.display = "none", 2500);
+        return;
+    }
+
+    modal.style.display = "flex";
+
+    // Hearts animation
+    for (let i = 0; i < 15; i++) setTimeout(createHeart, i * 120);
+
+    // Fade-out + redirect
+    setTimeout(() => {
+        document.body.classList.add('fade-out');
+        setTimeout(() => window.location.href = "motivation.html", 400);
+    }, 1500);
+}
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = ["💖","🌸","✨","💗"][Math.floor(Math.random() * 6)];
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight - 50 + "px";
+    heart.style.fontSize = (18 + Math.random() * 15) + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1500);
+}
+</script>
+
+</body>
+</html>
